@@ -8,8 +8,8 @@
       <!-- 登录表单区域 -->
       <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" label-width="0px" class="login_form">
         <!-- 用户名 -->
-        <el-form-item prop="email">
-          <el-input v-model="loginForm.email" placeholder="邮箱" prefix-icon="el-icon-user"></el-input>
+        <el-form-item prop="username">
+          <el-input v-model="loginForm.username" placeholder="用户名" prefix-icon="el-icon-user"></el-input>
         </el-form-item>
         <!-- 密码 -->
         <el-form-item prop="password">
@@ -36,14 +36,14 @@ export default {
     return {
       // 这是登陆表单的数据
       loginForm: {
-        email: '22301126@bjtu.edu.cn',
+        username: 'zym',
         password: '123456'
       },
       // 这是表单的验证规则对象
       loginFormRules: {
         // 验证用户名是否合法
-        email: [
-          { required: true, message: '请输入邮箱', trigger: 'blur' }
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' }
         ],
         // 验证密码是否合法
         password: [
@@ -65,10 +65,10 @@ export default {
         if (!valid) return
         const { data: res } = await this.axios.post('/login', this.loginForm)
         console.log(res)
-        if (res.status !== '1') return this.$message.error('登录失败！')
+        if (res.status !== '1') return this.$message.error(res.message)
         // console.log(res)
-        this.$message.success('登录成功')
-        window.sessionStorage.setItem('email', this.loginForm.email)
+        this.$message.success(res.message)
+        window.sessionStorage.setItem('username', this.loginForm.username)
         console.log(res.username)
         window.sessionStorage.setItem('username', res.uesrname)
         window.sessionStorage.setItem('storeid', res.store_id)

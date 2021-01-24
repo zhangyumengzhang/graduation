@@ -1,107 +1,62 @@
 <template>
-    <div>
+  <div>
+    <el-row :gutter="20">
+      <el-col :span="10">
+      <audio src="../../assets/yan.mp3" ></audio>
+      </el-col>
+      <el-col :span="12">
         <el-row :gutter="20">
-            <el-col :span="10">
-            <el-card shadow="hover" class="mgb20" style="height:350px;">
+          <el-col :span="15">
+            <el-card shadow="hover" :body-style="{ padding: '0px' }">
+              <div class="grid-content grid-con-1">
+                <i class="el-icon-lx-people grid-con-icon"></i>
 
-                    <div class="user-info">
+                <div class="grid-cont-right">
+                  <div class="grid-num">{{ userlook }}</div>
 
-                        <img src="../../assets/usericon.png" class="user-avator" alt />
-
-                        <div class="user-info-cont">
-
-                            <div class="user-info-name">{{name}}</div>
-
-                        </div>
-
-                    </div>
-
-                    <div class="user-info-list">
-
-                        <span>欢迎使用图你所爱店铺管理系统</span>
-
-                    </div>
-
-                </el-card>
-            </el-col>
-            <el-col :span="12">
-                 <el-row :gutter="20">
-                    <el-col :span="15">
-
-                        <el-card shadow="hover" :body-style="{padding: '0px'}">
-
-                            <div class="grid-content grid-con-1">
-
-                                <i class="el-icon-lx-people grid-con-icon"></i>
-
-                                <div class="grid-cont-right">
-
-                                    <div class="grid-num">{{userlook}}</div>
-
-                                    <div>用户访问量</div>
-
-                                </div>
-
-                            </div>
-
-                        </el-card>
-
-                    </el-col>
-                 </el-row>
-                  <el-row :gutter="20">
-                    <el-col :span="15">
-
-                        <el-card shadow="hover" :body-style="{padding: '0px'}">
-
-                            <div class="grid-content grid-con-2">
-
-                                <i class="el-icon-lx-notice grid-con-icon"></i>
-
-                                <div class="grid-cont-right">
-
-                                    <div class="grid-num">{{bookadd}}</div>
-
-                                    <div>图书增加量</div>
-
-                                </div>
-
-                            </div>
-
-                        </el-card>
-
-                    </el-col>
-                  </el-row>
-                   <el-row :gutter="20">
-                    <el-col :span="15">
-
-                        <el-card shadow="hover" :body-style="{padding: '0px'}">
-
-                            <div class="grid-content grid-con-3">
-
-                                <i class="el-icon-lx-goods grid-con-icon"></i>
-
-                                <div class="grid-cont-right">
-
-                                    <div class="grid-num">{{booksum}}</div>
-
-                                    <div>图书总数量</div>
-
-                                </div>
-
-                            </div>
-
-                        </el-card>
-                    </el-col>
-                   </el-row>
-            </el-col>
+                  <div>用户访问量</div>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
         </el-row>
-    </div>
+        <el-row :gutter="20">
+          <el-col :span="15">
+            <el-card shadow="hover" :body-style="{ padding: '0px' }">
+              <div class="grid-content grid-con-2">
+                <i class="el-icon-lx-notice grid-con-icon"></i>
+
+                <div class="grid-cont-right">
+                  <div class="grid-num">{{ bookadd }}</div>
+
+                  <div>图书增加量</div>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="15">
+            <el-card shadow="hover" :body-style="{ padding: '0px' }">
+              <div class="grid-content grid-con-3">
+                <i class="el-icon-lx-goods grid-con-icon"></i>
+
+                <div class="grid-cont-right">
+                  <div class="grid-num">{{ booksum }}</div>
+
+                  <div>图书总数量</div>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
-
 export default {
-
   data () {
     return {
       name: window.sessionStorage.getItem('username'),
@@ -128,164 +83,127 @@ export default {
       this.userlook = parseInt(res.look_mount)
     }
   }
-
 }
-
 </script>
 
 <style scoped>
 .el-row {
-
-    margin-bottom: 20px;
-
+  margin-bottom: 20px;
 }
 
 .grid-content {
+  display: flex;
 
-    display: flex;
+  align-items: center;
 
-    align-items: center;
-
-    height: 100px;
-
+  height: 100px;
 }
 
 .grid-cont-right {
+  flex: 1;
 
-    flex: 1;
+  text-align: center;
 
-    text-align: center;
+  font-size: 14px;
 
-    font-size: 14px;
-
-    color: #999;
-
+  color: #999;
 }
 
 .grid-num {
+  font-size: 30px;
 
-    font-size: 30px;
-
-    font-weight: bold;
-
+  font-weight: bold;
 }
 
 .grid-con-icon {
+  font-size: 50px;
 
-    font-size: 50px;
+  width: 100px;
 
-    width: 100px;
+  height: 100px;
 
-    height: 100px;
+  text-align: center;
 
-    text-align: center;
+  line-height: 100px;
 
-    line-height: 100px;
-
-    color: #fff;
-
+  color: #fff;
 }
 
 .grid-con-1 .grid-con-icon {
-
-    background: rgb(45, 140, 240);
-
+  background: rgb(45, 140, 240);
 }
 
 .grid-con-1 .grid-num {
-
-    color: rgb(45, 140, 240);
-
+  color: rgb(45, 140, 240);
 }
 
 .grid-con-2 .grid-con-icon {
-
-    background: rgb(100, 213, 114);
-
+  background: rgb(100, 213, 114);
 }
 
 .grid-con-2 .grid-num {
-
-    color: rgb(45, 140, 240);
-
+  color: rgb(45, 140, 240);
 }
 
 .grid-con-3 .grid-con-icon {
-
-    background: rgb(242, 94, 67);
-
+  background: rgb(242, 94, 67);
 }
 
 .grid-con-3 .grid-num {
-
-    color: rgb(242, 94, 67);
-
+  color: rgb(242, 94, 67);
 }
 
 .user-info {
+  display: flex;
 
-    display: flex;
+  align-items: center;
 
-    align-items: center;
+  padding-bottom: 20px;
 
-    padding-bottom: 20px;
+  border-bottom: 2px solid #ccc;
 
-    border-bottom: 2px solid #ccc;
-
-    margin-bottom: 20px;
-
+  margin-bottom: 20px;
 }
 
 .user-avator {
+  width: 120px;
 
-    width: 120px;
+  height: 120px;
 
-    height: 120px;
-
-    border-radius: 50%;
-
+  border-radius: 50%;
 }
 
 .user-info-cont {
+  padding-left: 50px;
 
-    padding-left: 50px;
+  flex: 1;
 
-    flex: 1;
+  font-size: 14px;
 
-    font-size: 14px;
-
-    color: #999;
-
+  color: #999;
 }
 
 .user-info-cont div:first-child {
+  font-size: 30px;
 
-    font-size: 30px;
+  float: center;
 
-    float: center;
-
-    color: #222;
-
+  color: #222;
 }
 
 .user-info-list {
+  font-size: 20px;
 
-    font-size: 20px;
+  color: #999;
 
-    color: #999;
-
-    line-height: 25px;
-
+  line-height: 25px;
 }
 
 .user-info-list span {
-
-    margin-left: 45px;
-
+  margin-left: 45px;
 }
 
 .mgb20 {
-    margin-bottom: 20px;
-
+  margin-bottom: 20px;
 }
 </style>
