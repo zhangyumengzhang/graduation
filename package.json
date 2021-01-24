@@ -13,6 +13,9 @@
     "echarts": "^4.8.0",
     "element-ui": "^2.13.2",
     "html2canvas": "^1.0.0-rc.5",
+    "less": "^4.1.0",
+    "less-loader": "^7.3.0",
+    "mint-ui": "^2.2.13",
     "schart.js": "^3.0.0",
     "vue": "^2.6.11",
     "vue-axios": "^2.1.5",
@@ -33,10 +36,12 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^6.2.2",
-    "less": "^3.11.3",
-    "less-loader": "^6.2.0",
-    "sass-loader": "^10.1.1",
+    "stylus": "^0.54.8",
+    "stylus-loader": "3.0.2",
     "vue-cli-plugin-element": "^1.0.1",
-    "vue-template-compiler": "^2.6.11"
+    "vue-cli-plugin-i18n": "^1.0.1",
+    "vue-i18n": "^8.22.4",
+    "vue-template-compiler": "^2.6.11",
+    "vuex": "^3.6.0"
   }
 }
