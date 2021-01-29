@@ -1,29 +1,31 @@
 <template>
-  <div class="register_container">
-    <!-- 注册 -->
-    <div class="register_box">
-      <!-- 头像区域 -->
-      <div class="avatar_box">
-       <img src="../../assets/logo.png">
-      </div>
-      <!-- 注册表单区域 -->
+   <div class="login-container">
+    <!--走马灯-->
+    <div class="carousel-form" :inline="true">
+      <img :src='imgurl' class="rightulliimg">
+    </div>
+    <!--登录-->
+    <div class="login-form">
+      <div class="title-container">
+          <h3 class="title">欢迎使用音频降噪系统</h3>
+        </div>
+        <!-- 注册表单区域 -->
       <el-form ref="registerFormRef" :model="registerForm" :rules="registerFormRules" label-width="0px" class="register_form">
         <!-- 用户名 -->
-        <el-form-item prop="email">
-          <el-input v-model="registerForm.email"  placeholder="邮箱名" prefix-icon="el-icon-user"></el-input>
+        <el-form-item prop="username">
+          <el-input v-model="registerForm.username"  placeholder="用户名" prefix-icon="el-icon-user"></el-input>
         </el-form-item>
         <!-- 密码 -->
-        <el-form-item prop="store_name" >
-          <el-input v-model="registerForm.store_name"  placeholder="店铺名" prefix-icon="el-icon-s-shop"></el-input>
+        <el-form-item prop="password" >
+          <el-input v-model="registerForm.password"  placeholder="密码" prefix-icon="el-icon-lock"></el-input>
         </el-form-item>
         <!-- 验证码 -->
-        <el-form-item prop="check">
-          <el-input v-model="registerForm.check"  placeholder="验证码" prefix-icon="el-icon-chat-line-round" style="width: 270px"></el-input>
-           <el-button type="primary" style="float: right" @click=getcode() >获取验证码</el-button>
+        <el-form-item prop="repassword">
+          <el-input v-model="registerForm.repassword"  placeholder="确认密码" prefix-icon="el-icon-lock"></el-input>
         </el-form-item>
         <!-- 按钮区 -->
         <el-form-item class="btns">
-          <el-button type="primary" @click="changePage()">确定</el-button>
+          <el-button type="primary" @click="register()">注册</el-button>
           <el-button type="info" @click=resetRegisterForm()>重置</el-button>
         </el-form-item>
         <!-- 返回登陆链接 -->
@@ -39,23 +41,24 @@
 export default {
   data () {
     return {
+      imgurl: require('@/assets/erji1.jpg'),
       // 这是注册表单数据
       registerForm: {
-        email: '',
-        store_name: '',
-        check: ''
+        username: '',
+        password: '',
+        repassword: ''
       },
       isLogin: true,
       registerFormRules: {
         // 验证用户名是否合法
-        email: [
-          { required: true, message: '请输入用户邮箱', trigger: 'blur' }
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' }
         ],
-        store_name: [
-          { required: true, message: '请输入注册店铺名称', trigger: 'blur' }
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' }
         ],
-        check: [
-          { required: true, message: '请输入验证码', trigger: 'blur' }
+        repassword: [
+          { required: true, message: '请确认密码', trigger: 'blur' }
         ]
       }
     }
@@ -70,27 +73,18 @@ export default {
     changeType () {
       this.$router.push('/login')
     },
-    // 注册第二步
-    changePage () {
+    // 注册
+    register () {
       this.$refs.registerFormRef.validate(async valid => {
         if (!valid) return
-        if (this.registerForm.check !== window.sessionStorage.getItem('check')) return this.$message.error('验证码不正确')
-        await this.$router.push('/registertwo')
-      })
-    },
-    // 获取验证码
-    getcode () {
-      this.axios.post('/check', {
-        email: this.registerForm.email,
-        store_name: this.registerForm.store_name
-      }
-      ).then(res => {
+        const { data: res } = await this.axios.post('/register', {
+          username: this.registerForm.username,
+          password: this.registerForm.password
+        })
         console.log(res)
-        if (res.data.status !== '1') return this.$message.error('获取验证码失败！')
-        this.$message.success('获取验证码成功')
-        window.sessionStorage.setItem('check', res.data.check)
-        window.sessionStorage.setItem('storename', this.registerForm.store_name)
-        window.sessionStorage.setItem('email', this.registerForm.email)
+        if (res.status !== '1') return this.$message.error(res.message)
+        this.$message.success(res.message)
+        this.$router.push('/login')
       })
     }
   }
@@ -98,57 +92,90 @@ export default {
 </script>
 
 <style lang='less' scoped>
-.register_container{
-  background-color: #2b4b6b;
-  height: 122%;
-}
-
-.register_box{
-  width: 450px;
-  height: 350px;
-  background-color: #fff;
-  border-radius: 3px;
-  position: absolute;
-  left: 50%;
-  top: 55%;
-  transform: translate(-50%,-50%);
-
-  .avatar_box{
-    height: 130px;
-    width: 130px;
-    border: 1px solid #eee;
-    border-radius: 50%;
-    padding: 10px;
-    box-shadow: 0 0 10px #ddd;
-    position :absolute;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    img{
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background-color: #eee;
-    }
-  }
-}
 .btns {
   display: flex;
   justify-content: flex-end;
-  height: 70%;
-  margin-bottom: 1%;
-  margin-left: 1px
+  height: 70%
 }
-.link {
-  margin-bottom: 1%;
-  margin-left: 1px;
-  text-align: right;
-}
-.register_form {
-  position: absolute;
-  bottom: 0px;
-  width: 100%;
-  padding: 0 20px;
-  box-sizing: border-box;
+// 登录内容样式
+.login-container{
+  height: 550px;
+  width: 1170px;
+  margin: 120px auto;
+  // 边框
+  // border: 2px solid red;
+  background-color: #eaecf0;
+  -webkit-align-items: center;
+align-items: center;
+justify-content: center;
+
+  -webkit-appearance: none;
+  // 元素添加圆角的边框：
+  border-radius: 10px;
+
+  // 走马灯样式
+  .carousel-form{
+    width: 680px;
+    margin-top: 55px;
+    margin-left: 22px;
+    border-radius: 10px;
+
+    float: left;
+    // 设定走马灯样式
+    .rightulliimg {
+      height: 440px;
+      width: 680px;
+      border-radius: 10px;
+    }
+  }
+  // 登录表单样式
+  .login-form{
+    width: 360px;
+    height: 440px;
+    background-color:white;
+    float: right;
+    margin: 55px 25px 0px 0px;
+    // 边框圆角
+    border-radius: 10px;
+    padding: 10px 25px;
+    // 边框
+    // border: 2px solid greenyellow;
+
+    .title-container{
+      position: relative;
+
+      .title {
+        font-size: 26px;
+        color: black;
+        margin: 15px auto 40px auto;
+        // 居中
+        text-align: center;
+        font-weight: bold;
+      }
+    }
+    // SVG样式
+    .svg-container {
+      // 内边距
+      padding: 6px 5px 6px 15px;
+      // 颜色
+      color: #889aa4;
+      // 居中
+      vertical-align: middle;
+      // 宽度
+      width: 30px;
+      // 显示
+      display: inline-block;
+    }
+    // 密码样式
+    .show-pwd {
+      position: absolute;
+      right: 10px;
+      top: 7px;
+      font-size: 16px;
+      color: #889aa4;
+      cursor: pointer;
+      user-select: none;
+    }
+  }
 }
 </style>

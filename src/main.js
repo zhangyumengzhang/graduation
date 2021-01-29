@@ -11,7 +11,7 @@ import PDFSave from 'vue-to-pdf'
 axios.defaults.baseURL = '/api'
 axios.interceptors.request.use(config => {
   console.log(config)
-  config.headers.Authorization = window.sessionStorage.getItem('email')
+  config.headers.Authorization = window.sessionStorage.getItem('username')
   // 最后必须return config
   return config
 })
