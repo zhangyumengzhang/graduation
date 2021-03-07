@@ -30,7 +30,7 @@
         </el-form-item>
         <!-- 返回登陆链接 -->
         <div class='link'>
-          <el-link type="info" @click="changeType()">已有账号请点击登录</el-link>
+          <el-link type="info" @click="changeType()">已有账号请登录</el-link>
         </div>
       </el-form>
     </div>

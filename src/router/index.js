@@ -4,25 +4,25 @@ import login from '../views/logReg/login.vue'
 import home from '../components/home.vue'
 import register from '../views/logReg/register.vue'
 import person from '../views/logReg/person.vue'
-import registertwo from '../views/logReg/registertwo.vue'
 import myaudio from '../views/myaudio.vue'
-import welcome from '../views/logReg/Welcome.vue'
 import star from '../views/star.vue'
-import rnn from '../views/rnn.vue'
+// import rnn from '../views/rnn.vue'
+import welcome from '../views/welcome.vue'
+import shangchuan from '../views/shangchuan.vue'
 Vue.use(VueRouter)
 
 const routes = [
   { path: '/login', component: login },
   { path: '/register', component: register },
   { path: '/', redirect: '/login' },
-  { path: '/registertwo', component: registertwo },
   {
     path: '/home',
     component: home,
     redirect: '/welcome',
-    children: [{ path: '/welcome', component: welcome },
+    children: [
+      { path: '/welcome', component: welcome },
       { path: '/myaudio', component: myaudio },
-      { path: '/rnn', component: rnn },
+      { path: '/rnn', component: shangchuan },
       { path: '/star', component: star },
       { path: '/person', component: person }
     ]

@@ -1,78 +1,77 @@
 <template>
-  <div class="recommend-music">
-    <h2 class="title">推荐新歌曲</h2>
-    <song-list :songList="songs"></song-list>
+  <div>
+    <div style="padding:10px 0;">
+          <!-- 搜索与添加区域 -->
+       <el-row gutter="20">
+         <el-col :span="8">
+           <el-input placeholder="请输入内容" clearable
+           @clear="getBookList">
+             <el-button slot="append" icon="el-icon-search" @click="selectBookQuery"></el-button>
+          </el-input>
+          </el-col>
+       </el-row>
+      <aplayer :autoplay='false' :music="song" :list="musiclist"></aplayer>
+    </div>
+
   </div>
 </template>
 
 <script>
-import songList from '../components/common/songList/Index'
-import { createSong } from '@/model/song'
+import aplayer from 'vue-aplayer'
+
 export default {
+  name: 'Aplayer',
+  components: {
+    // 别忘了引入组件
+    aplayer: aplayer
+  },
   data () {
     return {
-      songs: []
+      flag: false,
+      musiclist: [],
+      song: { title: '', artist: '', src: '' }
     }
   },
-  components: {
-    songList
-  },
-  // 监听属性 类似于data概念
-  computed: {},
-  // 监控data中的数据变化
-  watch: {},
-  // 方法集合
-  methods: {
-    // 获取推荐新音乐
-    async getNewSongs () {
-      try {
-        const res = await this.$api.getNewSongs()
-        const list = []
-        if (res.code === 200) {
-          res.result.map(item => {
-            list.push(item.id)
-          })
-          this.getSongDetail(list)
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    // 获取歌曲列表
-    async getSongDetail (sliceArr) {
-      const timestamp = new Date().valueOf()
-      sliceArr = sliceArr.join(',')
-      try {
-        const res = await this.$api.getSongDetail(sliceArr, timestamp)
-        this.songs = this._normalizeSongs(res.songs)
-        console.log(this.songs)
-      } catch (error) {
-      }
-    },
-    // 处理歌曲
-    _normalizeSongs (list) {
-      const ret = []
-      list.map(item => {
-        if (item.id) {
-          ret.push(createSong(item))
-        }
-      })
-      return ret
-    }
-  },
-  // 生命周期 - 创建完成（可以访问当前this实例）
-  created () {},
-  // 生命周期 - 挂载完成（可以访问DOM元素）
   mounted () {
-    this.getNewSongs()
+    // 异步加载，先加载出player再使用
+    this.init()
+    const aplayer = this.$refs.player.control
+    aplayer.play()
+  },
+  methods: {
+    async init () {
+      const { data: res } = await this.axios.post('/getaudio', {
+        username: window.sessionStorage.getItem('username')
+      })
+      console.log(res)
+      if (res.status !== '1') return this.$message.error(res.message)
+
+      if (res.status === '1') {
+        this.$message.success(res.message)
+        this.temp = res.songlists
+
+        this.song.title = this.temp[0].audiotitle
+        this.song.artist = window.sessionStorage.getItem('username')
+        this.song.src = 'http://localhost:8900/static/' + this.temp[0].audiotitle
+
+        for (let i = 0; i <= this.temp.length; i++) {
+          const obj = {}
+          // url=>歌曲地址 title=>头部 author=>歌手 pic=>写真图片 lrc=>歌词
+          // 其中url必须有，其他的都是非必须
+          obj.title = this.temp[i].audiotitle
+          obj.artist = window.sessionStorage.getItem('username')
+          obj.src = 'http://localhost:8900/static/' + this.temp[i].audiotitle
+          // 把数据一个个push到songList数组中，在a-player标签中使用 :music="songList" 就OK了
+          this.musiclist.push(obj)
+          console.log(this.musicList)
+        }
+        // 因为是异步请求，所以一开始播放器中是没有歌曲的，所有给了个v-if不然会插件默认会先生成播放器，导致报错(这个很重要)
+        this.flag = true
+      };
+    }
   }
 }
 </script>
 
-<style lang="stylus" scoped>
-.recommend-music {
-  .title {
-    margin: 0 0 15px 0;
-  }
-}
+<style lang="scss" scoped type="text/css">
 </style>

@@ -6,7 +6,7 @@ import './assets/css/global.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import PDFSave from 'vue-to-pdf'
-
+import locale from 'element-ui/lib/locale/lang/en'
 // 配置请求的根路径 http://timemeetyou.com:8889/api/private/v1/  http://124.70.71.236:8000
 axios.defaults.baseURL = '/api'
 axios.interceptors.request.use(config => {
@@ -16,7 +16,7 @@ axios.interceptors.request.use(config => {
   return config
 })
 
-Vue.use(VueAxios, axios)
+Vue.use(VueAxios, axios, Element, { locale })
 Vue.config.productionTip = false
 Vue.use(PDFSave)
 new Vue({

@@ -17,10 +17,8 @@
         active-text-color="#ffd04b"
         unique-opened :collapse-transition="false"
       >
-       <el-menu-item index="/home" @click="saveNavState('/home')">首页 <i class="el-icon-s-home"></i> </el-menu-item>
-        <el-menu-item index="/rnn" @click="saveNavState('/rnn')" >音频降噪
-        <i class="el-icon-setting"></i>
-        </el-menu-item>
+       <el-menu-item index="/welcome" @click="saveNavState('/welcome')">首页 <i class="el-icon-s-home"></i> </el-menu-item>
+        <el-menu-item index="/rnn" @click="saveNavState('/rnn')" >音频降噪<i class="el-icon-setting"></i></el-menu-item>
         <el-menu-item index="/myaudio" @click="saveNavState('/myaudio')">我的音频 <i class="el-icon-document"></i> </el-menu-item>
         <el-menu-item index="/star" @click="saveNavState('/star')" >收藏夹  <i class="el-icon-star-off"></i> </el-menu-item>
         <el-submenu index="4">
@@ -29,7 +27,7 @@
          <el-menu-item index="/english" @click="saveNavState('/english')" >English</el-menu-item>
         </el-submenu>
       </el-menu>
-         <!-- 用户名下拉菜单 -->
+       <!-- 用户名下拉菜单 -->
             <el-dropdown class="user-name" trigger="click" @command="handleCommand">
               <span class="el-dropdown-link">
                 {{username}}
@@ -56,7 +54,7 @@
 export default {
   data () {
     return {
-      activePath: '/home'
+      activePath: '/welcome'
     }
   },
   created () {
@@ -133,6 +131,6 @@ export default {
 .user-name {
   margin-left: 1px;
   color: #fff;
-  font-size: 15px;
+  font-size: 17px;
 }
 </style>
