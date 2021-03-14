@@ -10,9 +10,8 @@
           </el-input>
           </el-col>
        </el-row>
-      <aplayer :autoplay='false' :music="song" :list="musiclist"></aplayer>
+      <aplayer :autoplay='false' :music="song" :list="musiclist" :v-if="flag"></aplayer>
     </div>
-
   </div>
 </template>
 
@@ -32,7 +31,7 @@ export default {
       song: { title: '', artist: '', src: '' }
     }
   },
-  mounted () {
+  async mounted () {
     // 异步加载，先加载出player再使用
     this.init()
     const aplayer = this.$refs.player.control
@@ -40,7 +39,7 @@ export default {
   },
   methods: {
     async init () {
-      const { data: res } = await this.axios.post('/getaudio', {
+      const { data: res } = await this.axios.post('/getstar', {
         username: window.sessionStorage.getItem('username')
       })
       console.log(res)

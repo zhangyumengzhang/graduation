@@ -6,7 +6,6 @@ import register from '../views/logReg/register.vue'
 import person from '../views/logReg/person.vue'
 import myaudio from '../views/myaudio.vue'
 import star from '../views/star.vue'
-// import rnn from '../views/rnn.vue'
 import welcome from '../views/welcome.vue'
 import shangchuan from '../views/shangchuan.vue'
 Vue.use(VueRouter)

@@ -10,7 +10,7 @@
           </el-input>
           </el-col>
        </el-row>
-      <aplayer :autoplay='false' :music="song" :list="musiclist"></aplayer>
+      <aplayer :autoplay='false' :music="song" :list="musiclist" :v-if="flag" mode="circulation"></aplayer>
     </div>
 
   </div>
@@ -32,7 +32,7 @@ export default {
       song: { title: '', artist: '', src: '' }
     }
   },
-  mounted () {
+  async mounted () {
     // 异步加载，先加载出player再使用
     this.init()
     const aplayer = this.$refs.player.control
@@ -63,7 +63,7 @@ export default {
           obj.src = 'http://localhost:8900/static/' + this.temp[i].audiotitle
           // 把数据一个个push到songList数组中，在a-player标签中使用 :music="songList" 就OK了
           this.musiclist.push(obj)
-          console.log(this.musicList)
+          console.log(this.musiclist)
         }
         // 因为是异步请求，所以一开始播放器中是没有歌曲的，所有给了个v-if不然会插件默认会先生成播放器，导致报错(这个很重要)
         this.flag = true
