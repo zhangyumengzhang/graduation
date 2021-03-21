@@ -40,6 +40,13 @@
 <script>
 export default {
   data () {
+    const validate2 = (rule, value, callback) => {
+      if (value !== this.registerForm.password) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
     return {
       imgurl: require('@/assets/erji1.jpg'),
       // 这是注册表单数据
@@ -58,7 +65,8 @@ export default {
           { required: true, message: '请输入密码', trigger: 'blur' }
         ],
         repassword: [
-          { required: true, message: '请确认密码', trigger: 'blur' }
+          { required: true, message: '请确认密码', trigger: 'blur' },
+          { validator: validate2, trigger: 'blur' }
         ]
       }
     }
@@ -82,7 +90,10 @@ export default {
           password: this.registerForm.password
         })
         console.log(res)
-        if (res.status !== '1') return this.$message.error(res.message)
+        if (res.status !== '1') {
+          this.resetRegisterForm()
+          return this.$message.error(res.message)
+        }
         this.$message.success(res.message)
         this.$router.push('/login')
       })

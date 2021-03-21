@@ -4,15 +4,19 @@ import login from '../views/logReg/login.vue'
 import home from '../components/home.vue'
 import register from '../views/logReg/register.vue'
 import person from '../views/logReg/person.vue'
+import forget from '../views/logReg/forget.vue'
 import myaudio from '../views/myaudio.vue'
-import star from '../views/star.vue'
+// import test from '../views/test.vue'
+// import star from '../views/star.vue'
 import welcome from '../views/welcome.vue'
-import shangchuan from '../views/shangchuan.vue'
+import newrnn from '../views/newrnn.vue'
+import newstar from '../views/newstar.vue'
 Vue.use(VueRouter)
 
 const routes = [
   { path: '/login', component: login },
   { path: '/register', component: register },
+  { path: '/forget', component: forget },
   { path: '/', redirect: '/login' },
   {
     path: '/home',
@@ -21,8 +25,8 @@ const routes = [
     children: [
       { path: '/welcome', component: welcome },
       { path: '/myaudio', component: myaudio },
-      { path: '/rnn', component: shangchuan },
-      { path: '/star', component: star },
+      { path: '/rnn', component: newrnn },
+      { path: '/star', component: newstar },
       { path: '/person', component: person }
     ]
   }
@@ -38,7 +42,7 @@ router.beforeEach((to, from, next) => {
   // from代表从哪个路径跳转username
   // next是一个函数，代表放行
   // next() 放行  next('/login') 强制跳转
-  if (to.path === '/login' || to.path === '/register' || to.path === '/registertwo') return next()
+  if (to.path === '/login' || to.path === '/register' || to.path === '/registertwo' || to.path === '/forget') return next()
   // 获取token
   const tokenstr = window.sessionStorage.getItem('username')
   if (!tokenstr) return next('/login')

@@ -26,7 +26,8 @@
         </el-form-item>
         <!-- 注册链接 -->
         <div>
-          <el-link type="info" @click="changeType">新用户点击注册</el-link>
+          <el-link type="info" @click="changeType">注册</el-link>
+          <el-link type="info" @click="changeType1">忘记密码</el-link>
         </div>
       </el-form>
     </div>
@@ -93,6 +94,10 @@ export default {
     // 改变表单
     changeType () {
       this.$router.push('/register')
+    },
+    // 改变表单
+    changeType1 () {
+      this.$router.push('/forget')
     }
   }
 }

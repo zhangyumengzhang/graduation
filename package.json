@@ -1,5 +1,5 @@
 {
-  "name": "vue_shop",
+  "name": "graduation",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -39,6 +39,7 @@
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^6.2.2",
     "file-loader": "^6.2.0",
+    "sass": "^1.32.8",
     "sass-loader": "^10.1.1",
     "stylus": "^0.54.8",
     "stylus-loader": "3.0.2",

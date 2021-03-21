@@ -1,18 +1,26 @@
 <template>
   <div>
+     <!-- 面包屑导航区域 -->
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/welcome' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>我的音频</el-breadcrumb-item>
+    </el-breadcrumb>
+    <!-- 卡片视图区域 -->
+ <el-card class="box-card">
     <div style="padding:10px 0;">
-          <!-- 搜索与添加区域 -->
-       <el-row gutter="20">
+         <!-- 搜索与添加区域 -->
+       <el-row gutter=20>
          <el-col :span="8">
-           <el-input placeholder="请输入内容" clearable
-           @clear="getBookList">
-             <el-button slot="append" icon="el-icon-search" @click="selectBookQuery"></el-button>
+           <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable
+           @clear="init">
+             <el-button slot="append" icon="el-icon-search" @click="queryaudio"></el-button>
           </el-input>
           </el-col>
+          <el-button type="primary" @click="change" >{{this.musiclist[0].isstar}}</el-button>
        </el-row>
-      <aplayer :autoplay='false' :music="song" :list="musiclist" :v-if="flag" mode="circulation"></aplayer>
+        <aplayer ref='aplayer' :autoplay='false' :music="song" :list="musiclist" :v-if="flag" theme='#b7daff' listMaxHeight='400px' ></aplayer>
     </div>
-
+ </el-card>
   </div>
 </template>
 
@@ -27,6 +35,10 @@ export default {
   },
   data () {
     return {
+      queryInfo: {
+        username: window.sessionStorage.getItem('username'),
+        query: ''
+      },
       flag: false,
       musiclist: [],
       song: { title: '', artist: '', src: '' }
@@ -44,16 +56,47 @@ export default {
         username: window.sessionStorage.getItem('username')
       })
       console.log(res)
+      this.musiclist = []
       if (res.status !== '1') return this.$message.error(res.message)
 
       if (res.status === '1') {
         this.$message.success(res.message)
         this.temp = res.songlists
-
-        this.song.title = this.temp[0].audiotitle
-        this.song.artist = window.sessionStorage.getItem('username')
-        this.song.src = 'http://localhost:8900/static/' + this.temp[0].audiotitle
-
+        for (let i = 0; i <= this.temp.length; i++) {
+          const obj = {}
+          // url=>歌曲地址 title=>头部 author=>歌手 pic=>写真图片 lrc=>歌词
+          // 其中url必须有，其他的都是非必须
+          obj.title = this.temp[i].audiotitle
+          obj.artist = window.sessionStorage.getItem('username')
+          obj.src = 'http://localhost:8900/static/' + this.temp[i].audiotitle
+          if (this.temp[i].isstar === '1') {
+            obj.isstar = '已收藏'
+          } else {
+            obj.isstar = '未收藏'
+          }
+          // 把数据一个个push到songList数组中，在a-player标签中使用 :music="songList" 就OK了
+          this.musiclist.push(obj)
+          this.song = this.musiclist[0]
+        }
+        // 因为是异步请求，所以一开始播放器中是没有歌曲的，所以给了个v-if不然会插件默认会先生成播放器，导致报错(这个很重要)
+        this.flag = true
+      };
+    },
+    // 模糊查询音频
+    async queryaudio () {
+      // 获取的请求
+      const { data: res } = await this.axios.post('/queryaudio', {
+        username: this.queryInfo.username,
+        query: this.queryInfo.query
+      })
+      console.log(res)
+      this.musiclist = []
+      if (res.status !== '1') {
+        return this.$message.error(res.message)
+      }
+      if (res.status === '1') {
+        this.$message.success(res.message)
+        this.temp = res.songlists
         for (let i = 0; i <= this.temp.length; i++) {
           const obj = {}
           // url=>歌曲地址 title=>头部 author=>歌手 pic=>写真图片 lrc=>歌词
@@ -64,8 +107,9 @@ export default {
           // 把数据一个个push到songList数组中，在a-player标签中使用 :music="songList" 就OK了
           this.musiclist.push(obj)
           console.log(this.musiclist)
+          this.song = this.musiclist[0]
         }
-        // 因为是异步请求，所以一开始播放器中是没有歌曲的，所有给了个v-if不然会插件默认会先生成播放器，导致报错(这个很重要)
+        // 因为是异步请求，所以一开始播放器中是没有歌曲的，所以给了个v-if不然会插件默认会先生成播放器，导致报错(这个很重要)
         this.flag = true
       };
     }
@@ -74,4 +118,10 @@ export default {
 </script>
 
 <style lang="scss" scoped type="text/css">
+    .shoucang{
+        font-size: 32px;
+    }
+    .shoucang.active{
+        color: red;
+    }
 </style>

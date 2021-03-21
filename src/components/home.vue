@@ -35,9 +35,9 @@
               </span>
               <el-dropdown-menu slot="dropdown">
                 <a>
-                  <el-dropdown-item divided command="person">个人中心</el-dropdown-item>
+                  <el-dropdown-item divided command="person" >个人中心</el-dropdown-item>
                 </a>
-                  <el-dropdown-item divided command="logout">退出登录</el-dropdown-item>
+                  <el-dropdown-item divided command="logout" >退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
     </el-header>
@@ -75,6 +75,7 @@ export default {
       }
       if (command === 'person') {
         this.$router.push('/person')
+        this.saveNavState('/person')
       }
     }
   }

@@ -36,7 +36,8 @@ import {
   Image,
   InfiniteScroll,
   CarouselItem,
-  Carousel
+  Carousel,
+  Slider
 } from 'element-ui'
 
 Vue.use(Button)
@@ -74,5 +75,6 @@ Vue.use(Image)
 Vue.use(InfiniteScroll)
 Vue.use(Carousel)
 Vue.use(CarouselItem)
+Vue.use(Slider)
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm

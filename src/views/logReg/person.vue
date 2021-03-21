@@ -14,10 +14,13 @@
     <!-- 内容主体区域-->
       <el-form :model="personForm" :rules="personFormRules" ref="personFormRef" label-width="80px">
          <el-form-item label="用户名称" prop="username">
-          <el-input v-model="personForm.username" :disabled="isdisabled"></el-input>
+          <el-input v-model="personForm.username" disabled></el-input>
         </el-form-item>
-         <el-form-item label="昵称" prop="nickname">
-          <el-input v-model="personForm.nickname" :disabled="isdisabled"></el-input>
+         <el-form-item label="密码" prop="password">
+          <el-input v-model="personForm.password" :disabled="isdisabled"></el-input>
+        </el-form-item>
+         <el-form-item label="电话" prop="phone">
+          <el-input v-model="personForm.phone" :disabled="isdisabled"></el-input>
         </el-form-item>
          <el-form-item label="性别" prop="gender">
           <el-input v-model="personForm.gender" :disabled="isdisabled"></el-input>
@@ -26,13 +29,10 @@
           <el-input v-model="personForm.age" :disabled="isdisabled"></el-input>
         </el-form-item>
           <el-form-item label="邮箱" prop="email">
-          <el-input v-model="personForm.email" disabled></el-input>
+          <el-input v-model="personForm.email" :disabled="isdisabled"></el-input>
         </el-form-item>
           <el-form-item label="国家" prop="country">
           <el-input v-model="personForm.country" :disabled="isdisabled"></el-input>
-        </el-form-item>
-          <el-form-item label="地区" prop="location">
-          <el-input v-model="personForm.location" :disabled="isdisabled"></el-input>
         </el-form-item>
       </el-form>
       <span class="bottombtn" :hidden="isdisabled">
@@ -46,73 +46,95 @@
 <script>
 export default {
   data () {
+    // const email = (rule, value, callback) => {
+    //   if (value !== '') {
+    //     const reg = /^([a-zA-Z0-9]+[_|\\_|-|\-|\\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\\_|\\.|-]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/
+    //     if (!reg.test(value)) {
+    //       callback(new Error('电子邮箱格式形如：xx-xx@x-xx.ab或xx-xx@x-xx.abc'))
+    //     }
+    //   }
+    // }
+    // const phone = (rule, value, callback) => {
+    //   if (value !== '') {
+    //     const reg = /^1[34578]\d{9}$/
+    //     if (!reg.test(value)) {
+    //       callback(new Error('请输入正确的手机号'))
+    //     }
+    //   }
+    // }
     return {
       // 获取用户列表的参数对象
       isdisabled: true,
       // 添加用户的表单数据
       personForm: {
         username: '',
-        nickname: '',
+        password: '',
+        phone: '',
         gender: '',
         age: '',
         email: '',
-        country: '',
-        location: ''
+        country: ''
       },
       // 添加表单的验证规则对象
       personFormRules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' }
         ],
-        gender: [
-          { required: true, message: '请输入性别', trigger: 'blur' }
-        ],
-        age: [
-          { required: true, message: '请输入年龄', trigger: 'blur' }
-        ],
-        email: [
-          { required: true, message: '请输入邮箱', trigger: 'blur' }
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' }
         ]
+        // email: [
+        //   { validator: email, trigger: 'blur' }
+        // ]
+        // phone: [
+        //   { validator: phone, trigger: 'blur' }
+        // ]
       }
     }
   },
+
   created () {
     this.getpersonInfo()
   },
   methods: {
     async getpersonInfo () {
       // 获取用户信息请求
-      const { data: res } = await this.axios.post('/selectUserDetail', { email: window.sessionStorage.getItem('email') })
-      console.log(res)
+      const { data: res } = await this.axios.post('/getuser', { username: window.sessionStorage.getItem('username') })
       if (res.status !== '1') {
-        return this.$message.error('获取用户信息失败')
+        return this.$message.error(res.message)
       }
-      this.$message.success('获取用户信息成功')
-      this.personForm = res.data[0]
-      console.log(res)
+      this.$message.success(res.message)
+      this.personForm = res.userlists[0]
     },
     changeType () {
+      this.getpersonInfo()
       this.isdisabled = !this.isdisabled
     },
     async editperson () {
-      const { data: res } = await this.axios.post('/modifyUserDetail', {
-        email: this.personForm.email,
-        username: this.personForm.username,
-        nickname: this.personForm.nickname,
-        gender: this.personForm.gender,
-        age: this.personForm.age,
-        country: this.personForm.country,
-        location: this.personForm.location
+      this.$message.success('ceshi')
+      this.$refs.personFormRef.validate(async valid => {
+        this.$message.success('ceshi2')
+        if (!valid) return
+        const { data: res } = await this.axios.post('/modifyuser', {
+          username: this.personForm.username,
+          password: this.personForm.password,
+          phone: this.personForm.phone,
+          gender: this.personForm.gender,
+          age: this.personForm.age,
+          email: this.personForm.email,
+          country: this.personForm.country
+        })
+        console.log(res)
+        if (res.status !== '1') {
+          this.$message.error(res.message)
+          this.isdisabled = !this.isdisabled
+          this.getpersonInfo()
+        } else {
+          this.$message.success(res.message)
+          this.isdisabled = !this.isdisabled
+          this.getpersonInfo()
+        }
       })
-      console.log(res)
-      if (res.status !== '1') {
-        this.$message.error('修改个人信息失败')
-        this.isdisabled = !this.isdisabled
-        this.getpersonInfo()
-      }
-      this.$message.success('修改个人信息成功')
-      this.isdisabled = !this.isdisabled
-      this.getpersonInfo()
     }
   }
 }
