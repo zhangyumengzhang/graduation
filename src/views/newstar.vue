@@ -34,29 +34,32 @@
        <el-table :data="musiclist" border stripe>
          <el-table-column type="index" width="50"></el-table-column>
          <el-table-column label="用户名称">{{this.queryInfo.username}}</el-table-column>
-         <el-table-column label="音乐名称" prop="audiotitle"></el-table-column>
+         <el-table-column label="音乐名称" prop="title"></el-table-column>
          <el-table-column label="音乐类型" prop="type"></el-table-column>play
           <el-table-column label="播放" width="160px">
             <template slot-scope="scope">
              <!-- 播放 -->
-            <el-button type='primary' size="mini" icon="el-icon-video-play" @click='startPlayOrPause(scope.row.audiotitle)'></el-button>
+            <el-button type='primary' size="mini" icon="el-icon-video-play" @click='startPlayOrPause(scope.row.title)'></el-button>
              <!-- <el-button type="primary" icon="el-icon-video-play" size="mini" @click="handlePlay('audio')"></el-button> -->
            </template>
          </el-table-column>
          <el-table-column label="取消收藏" width="160px">
             <template slot-scope="scope">
              <!-- 收藏 -->
-             <el-button type="primary" icon="el-icon-star-on" size="mini" @click="changestar(scope.row.audiotitle)"></el-button>
+             <el-button type="primary" icon="el-icon-star-on" size="mini" @click="changestar(scope.row.title)"></el-button>
            </template>
          </el-table-column>
          <el-table-column label="删除" width="160px">
             <template slot-scope="scope">
              <!-- 删除 -->
-             <el-button type="primary" icon="el-icon-delete" size="mini" @click="deleteaudio(scope.row.audiotitle)"></el-button>
+             <el-button type="primary" icon="el-icon-delete" size="mini" @click="deleteaudio(scope.row.title)"></el-button>
            </template>
          </el-table-column>
        </el-table>
     </el-card>
+    <div class="bottom">
+      <h4>北京市海淀区 ｜ 北京交通大学 ｜ 软件工程1704 ｜ 张雨梦</h4>
+    </div>
   </div>
 </template>
 
@@ -122,11 +125,11 @@ export default {
       this.sliderTime = parseInt(this.audio.currentTime / this.audio.maxTime * 100)
     },
     /* 控制音频播放、暂停 */
-    startPlayOrPause (audiotitle) {
+    startPlayOrPause (title) {
       if (this.audio.playing) {
         this.pause()
       } else {
-        this.$refs.audio.src = 'http://localhost:8900/static/' + audiotitle
+        this.$refs.audio.src = 'http://localhost:8900/static/' + title
         this.play()
       }
     },
@@ -161,10 +164,10 @@ export default {
       };
     },
     // 改变收藏状态
-    async changestar (audiotitle) {
+    async changestar (title) {
       const { data: res } = await this.axios.post('/canclestar', {
         username: this.queryInfo.username,
-        audiotitle: audiotitle
+        title: title
       })
       console.log(res)
       if (res.status !== '1') return this.$message.error(res.message)
@@ -223,6 +226,13 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.bottom {
+  background-color: #E9EEF3;
+  text-align: right;
+  position:fixed;
+  bottom:0;
+  right: 5%;
+}
 #playMusic {
   display: flex;
   align-items: center;

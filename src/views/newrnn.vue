@@ -30,11 +30,11 @@
     <div class="audio">
        <audio class="audio" :src="newaudioUrl"  controls muted="muted"></audio>
     </div>
-    <div class="bottom">
-      <h4>北京市海淀区 ｜ 北京交通大学 ｜ 软件工程1704 ｜ 张雨梦</h4>
-    </div>
     </div>
  </el-card>
+     <div class="bottom">
+      <h4>北京市海淀区 ｜ 北京交通大学 ｜ 软件工程1704 ｜ 张雨梦</h4>
+    </div>
   </div>
 </template>
 

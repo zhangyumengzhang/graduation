@@ -18,15 +18,17 @@
           </el-col>
           <el-button type="primary" @click="change" >{{this.musiclist[0].isstar}}</el-button>
        </el-row>
-        <aplayer ref='aplayer' :autoplay='false' :music="song" :list="musiclist" :v-if="flag" theme='#b7daff' listMaxHeight='400px' ></aplayer>
+        <aplayer ref="player"  :music="song" :list="musiclist" :v-if="flag"  listMaxHeight='400px' ></aplayer>
     </div>
  </el-card>
+     <div class="bottom">
+      <h4>北京市海淀区 ｜ 北京交通大学 ｜ 软件工程1704 ｜ 张雨梦</h4>
+    </div>
   </div>
 </template>
 
 <script>
 import aplayer from 'vue-aplayer'
-
 export default {
   name: 'Aplayer',
   components: {
@@ -41,7 +43,7 @@ export default {
       },
       flag: false,
       musiclist: [],
-      song: { title: '', artist: '', src: '' }
+      song: {}
     }
   },
   async mounted () {
@@ -55,31 +57,35 @@ export default {
       const { data: res } = await this.axios.post('/getaudio', {
         username: window.sessionStorage.getItem('username')
       })
-      console.log(res)
+
       this.musiclist = []
       if (res.status !== '1') return this.$message.error(res.message)
-
       if (res.status === '1') {
         this.$message.success(res.message)
         this.temp = res.songlists
-        for (let i = 0; i <= this.temp.length; i++) {
-          const obj = {}
-          // url=>歌曲地址 title=>头部 author=>歌手 pic=>写真图片 lrc=>歌词
-          // 其中url必须有，其他的都是非必须
-          obj.title = this.temp[i].audiotitle
-          obj.artist = window.sessionStorage.getItem('username')
-          obj.src = 'http://localhost:8900/static/' + this.temp[i].audiotitle
-          if (this.temp[i].isstar === '1') {
+
+        this.song.title = this.temp[0].title
+        this.song.artist = window.sessionStorage.getItem('username')
+        this.song.src = 'http://localhost:8900/static/' + this.temp[0].title
+        if (this.temp[0].isstar === '1') {
+          this.song.isstar = '已收藏'
+        } else {
+          this.song.isstar = '未收藏'
+        }
+        this.temp.forEach(element => {
+          const obj = {
+            title: element.title,
+            src: 'http://localhost:8900/static/' + element.title,
+            artist: window.sessionStorage.getItem('username')
+          }
+          if (element.isstar === '1') {
             obj.isstar = '已收藏'
           } else {
             obj.isstar = '未收藏'
           }
-          // 把数据一个个push到songList数组中，在a-player标签中使用 :music="songList" 就OK了
           this.musiclist.push(obj)
-          this.song = this.musiclist[0]
-        }
-        // 因为是异步请求，所以一开始播放器中是没有歌曲的，所以给了个v-if不然会插件默认会先生成播放器，导致报错(这个很重要)
-        this.flag = true
+        })
+        this.song = this.musiclist[0]
       };
     },
     // 模糊查询音频
@@ -97,20 +103,28 @@ export default {
       if (res.status === '1') {
         this.$message.success(res.message)
         this.temp = res.songlists
+
+        this.song.title = this.temp[0].title
+        this.song.artist = window.sessionStorage.getItem('username')
+        this.song.src = 'http://localhost:8900/static/' + this.temp[0].title
+        if (this.temp[0].isstar === '1') {
+          this.song.isstar = '已收藏'
+        } else {
+          this.song.isstar = '未收藏'
+        }
+
         for (let i = 0; i <= this.temp.length; i++) {
           const obj = {}
           // url=>歌曲地址 title=>头部 author=>歌手 pic=>写真图片 lrc=>歌词
           // 其中url必须有，其他的都是非必须
-          obj.title = this.temp[i].audiotitle
+          obj.title = this.temp[i].title
           obj.artist = window.sessionStorage.getItem('username')
-          obj.src = 'http://localhost:8900/static/' + this.temp[i].audiotitle
+          obj.src = 'http://localhost:8900/static/' + this.temp[i].title
           // 把数据一个个push到songList数组中，在a-player标签中使用 :music="songList" 就OK了
           this.musiclist.push(obj)
-          console.log(this.musiclist)
-          this.song = this.musiclist[0]
         }
-        // 因为是异步请求，所以一开始播放器中是没有歌曲的，所以给了个v-if不然会插件默认会先生成播放器，导致报错(这个很重要)
-        this.flag = true
+
+        this.song = this.musiclist[0]
       };
     }
   }
@@ -124,4 +138,11 @@ export default {
     .shoucang.active{
         color: red;
     }
+.bottom {
+  background-color: #E9EEF3;
+  text-align: right;
+  position:fixed;
+  bottom:0;
+  right: 5%;
+}
 </style>

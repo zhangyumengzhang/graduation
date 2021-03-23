@@ -3,7 +3,7 @@
     <!-- 头部区域 -->
     <el-header>
       <div>
-        <img class="shoplogo" src="../assets/shoplogo.png" alt="" />
+        <img class="logo" src="../assets/shoplogo.png" alt="" />
         <span> 音频降噪系统</span>
       </div>
       <!--头部导航栏区域-->
@@ -102,7 +102,7 @@ export default {
     }
   }
 }
-.shoplogo {
+.logo {
   // display: block;
   width: 120px;
   height: 40px;
