@@ -1,10 +1,10 @@
 <template>
   <div class="box">
-      <!-- 面包屑导航区域 -->
+      <!-- 面包屑导航区域
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/welcome' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/welcome' }" @click="savenav">首页</el-breadcrumb-item>
       <el-breadcrumb-item>音频降噪</el-breadcrumb-item>
-    </el-breadcrumb>
+    </el-breadcrumb> -->
     <!-- 卡片视图区域 -->
  <el-card class="box-card">
     <div class="upload">
@@ -63,6 +63,7 @@ export default {
       filename: ''
     }
   },
+
   methods: {
     // 上传音频
     async beforeUpload (file) {

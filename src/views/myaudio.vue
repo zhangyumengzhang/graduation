@@ -1,10 +1,10 @@
 <template>
   <div>
-     <!-- 面包屑导航区域 -->
+     <!-- 面包屑导航区域
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/welcome' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>我的音频</el-breadcrumb-item>
-    </el-breadcrumb>
+    </el-breadcrumb> -->
     <!-- 卡片视图区域 -->
  <el-card class="box-card">
     <div style="padding:10px 0;">
@@ -16,9 +16,8 @@
              <el-button slot="append" icon="el-icon-search" @click="queryaudio"></el-button>
           </el-input>
           </el-col>
-          <el-button type="primary" @click="change" >{{this.musiclist[0].isstar}}</el-button>
        </el-row>
-        <aplayer ref="player"  :music="song" :list="musiclist" :v-if="flag"  listMaxHeight='400px' ></aplayer>
+        <aplayer ref="player"  :music="musiclist[0]" :list="musiclist" :v-if="flag"  listMaxHeight='400px' ></aplayer>
     </div>
  </el-card>
      <div class="bottom">
@@ -37,13 +36,13 @@ export default {
   },
   data () {
     return {
+      star: '',
       queryInfo: {
         username: window.sessionStorage.getItem('username'),
         query: ''
       },
       flag: false,
-      musiclist: [],
-      song: {}
+      musiclist: []
     }
   },
   async mounted () {
@@ -58,34 +57,30 @@ export default {
         username: window.sessionStorage.getItem('username')
       })
 
+      console.log(res)
       this.musiclist = []
-      if (res.status !== '1') return this.$message.error(res.message)
+      if (res.status !== '1') {
+        return this.$message.error(res.message)
+      }
       if (res.status === '1') {
         this.$message.success(res.message)
         this.temp = res.songlists
 
-        this.song.title = this.temp[0].title
-        this.song.artist = window.sessionStorage.getItem('username')
-        this.song.src = 'http://localhost:8900/static/' + this.temp[0].title
-        if (this.temp[0].isstar === '1') {
-          this.song.isstar = '已收藏'
-        } else {
-          this.song.isstar = '未收藏'
-        }
-        this.temp.forEach(element => {
-          const obj = {
-            title: element.title,
-            src: 'http://localhost:8900/static/' + element.title,
-            artist: window.sessionStorage.getItem('username')
-          }
-          if (element.isstar === '1') {
+        for (let i = 0; i <= this.temp.length; i++) {
+          const obj = {}
+          // url=>歌曲地址 title=>头部 author=>歌手 pic=>写真图片 lrc=>歌词
+          // 其中url必须有，其他的都是非必须
+          obj.title = this.temp[i].title
+          obj.artist = window.sessionStorage.getItem('username')
+          obj.src = 'http://localhost:8900/static/' + this.temp[i].title
+          if (this.temp[i].isstar === '1') {
             obj.isstar = '已收藏'
           } else {
             obj.isstar = '未收藏'
           }
+          // 把数据一个个push到songList数组中，在a-player标签中使用 :music="songList" 就OK了
           this.musiclist.push(obj)
-        })
-        this.song = this.musiclist[0]
+        }
       };
     },
     // 模糊查询音频
@@ -104,15 +99,6 @@ export default {
         this.$message.success(res.message)
         this.temp = res.songlists
 
-        this.song.title = this.temp[0].title
-        this.song.artist = window.sessionStorage.getItem('username')
-        this.song.src = 'http://localhost:8900/static/' + this.temp[0].title
-        if (this.temp[0].isstar === '1') {
-          this.song.isstar = '已收藏'
-        } else {
-          this.song.isstar = '未收藏'
-        }
-
         for (let i = 0; i <= this.temp.length; i++) {
           const obj = {}
           // url=>歌曲地址 title=>头部 author=>歌手 pic=>写真图片 lrc=>歌词
@@ -120,11 +106,14 @@ export default {
           obj.title = this.temp[i].title
           obj.artist = window.sessionStorage.getItem('username')
           obj.src = 'http://localhost:8900/static/' + this.temp[i].title
+          if (this.temp[i].isstar === '1') {
+            obj.isstar = '已收藏'
+          } else {
+            obj.isstar = '未收藏'
+          }
           // 把数据一个个push到songList数组中，在a-player标签中使用 :music="songList" 就OK了
           this.musiclist.push(obj)
         }
-
-        this.song = this.musiclist[0]
       };
     }
   }

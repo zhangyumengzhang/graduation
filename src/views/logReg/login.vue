@@ -9,7 +9,7 @@
       <div class="title-container">
           <h3 class="title">欢迎使用音频降噪系统</h3>
         </div>
-    <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" label-width="0px" class="login_form">
+    <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" label-width="0px">
         <!-- 用户名 -->
         <el-form-item prop="username">
           <el-input v-model="loginForm.username" placeholder="用户名" prefix-icon="el-icon-user"></el-input>
@@ -26,8 +26,8 @@
         </el-form-item>
         <!-- 注册链接 -->
         <div>
-          <el-link type="info" @click="changeType">注册</el-link>
-          <el-link type="info" @click="changeType1">忘记密码</el-link>
+          <el-link type="info" @click="changeType" class="ellink2">注册</el-link>
+          <el-link type="info" @click="changeType1" class="ellink">忘记密码</el-link>
         </div>
       </el-form>
     </div>
@@ -118,8 +118,8 @@ export default {
   // border: 2px solid red;
   background-color: #eaecf0;
   -webkit-align-items: center;
-align-items: center;
-justify-content: center;
+  align-items: center;
+  justify-content: center;
 
   -webkit-appearance: none;
   // 元素添加圆角的边框：
@@ -152,7 +152,13 @@ justify-content: center;
     padding: 10px 25px;
     // 边框
     // border: 2px solid greenyellow;
-
+    .ellink {
+      margin-top: -54px;
+      left: 12%;
+    }
+    // .ellink2 {
+    //   margin-top: -78px;
+    // }
     .title-container{
       position: relative;
 

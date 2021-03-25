@@ -1,10 +1,10 @@
 <template>
   <div >
-    <!-- 面包屑导航区域 -->
+    <!-- 面包屑导航区域
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/welcome' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>收藏夹</el-breadcrumb-item>
-    </el-breadcrumb>
+    </el-breadcrumb> -->
     <!-- 卡片视图区域 -->
 
     <el-card class="box-card">
@@ -12,10 +12,12 @@
        <el-row gutter="20">
          <el-col :span="8">
            <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable
-           @clear="getstarmusicList">
-             <el-button slot="append" icon="el-icon-search" @click="querystaraudio"></el-button>
+           @clear="getlist">
+             <el-button slot="append" icon="el-icon-search" @click="queryaudio"></el-button>
           </el-input>
           </el-col>
+           <el-button @click="changenumto1" type="text" icon="el-icon-star-on" class="star">已收藏文件</el-button>
+            <el-button @click="changenumto2" type="text" icon="el-icon-star-off"  class="notstar">未收藏文件</el-button>
        </el-row>
          <!-- 播放进度条 -->
        <div id='playMusic'>
@@ -25,13 +27,9 @@
             @timeupdate="onTimeupdate"
             @loadedmetadata="onLoadedmetadata"
             controls muted="muted"></audio>
-          <!-- 进度条 -->
-          <!-- <el-slider v-model="sliderTime" :format-tooltip="formatProcessToolTip" @change="changeCurrentTime" class="slider"></el-slider>
-          <span>{{audio.currentTime | formartSecond}} / </span>
-          <span>{{audio.maxTime | formartSecond}}</span> -->
         </div>
        <!-- 类别列表区 -->
-       <el-table :data="musiclist" border stripe>
+       <el-table :data="musiclist" v-show="num==1" border stripe>
          <el-table-column type="index" width="50"></el-table-column>
          <el-table-column label="用户名称">{{this.queryInfo.username}}</el-table-column>
          <el-table-column label="音乐名称" prop="title"></el-table-column>
@@ -56,8 +54,37 @@
            </template>
          </el-table-column>
        </el-table>
+              <!-- 类别列表区 -->
+       <el-table :data="notstarlist" v-show="num==2" border stripe>
+         <el-table-column type="index" width="50"></el-table-column>
+         <el-table-column label="用户名称">{{this.queryInfo.username}}</el-table-column>
+         <el-table-column label="音乐名称" prop="title"></el-table-column>
+         <el-table-column label="音乐类型" prop="type"></el-table-column>play
+          <el-table-column label="播放" width="160px">
+            <template slot-scope="scope">
+             <!-- 播放 -->
+            <el-button type='primary' size="mini" icon="el-icon-video-play" @click='startPlayOrPause(scope.row.title)'></el-button>
+             <!-- <el-button type="primary" icon="el-icon-video-play" size="mini" @click="handlePlay('audio')"></el-button> -->
+           </template>
+         </el-table-column>
+         <el-table-column label="收藏" width="160px">
+            <template slot-scope="scope">
+             <!-- 收藏 -->
+             <el-button type="primary" icon="el-icon-star-on" size="mini" @click="addstar(scope.row.title)"></el-button>
+           </template>
+         </el-table-column>
+         <el-table-column label="删除" width="160px">
+            <template slot-scope="scope">
+             <!-- 删除 -->
+             <el-button type="primary" icon="el-icon-delete" size="mini" @click="deleteaudio(scope.row.title)"></el-button>
+           </template>
+         </el-table-column>
+       </el-table>
     </el-card>
-    <div class="bottom">
+    <div class="bottom" v-show="num==1">
+      <h4>北京市海淀区 ｜ 北京交通大学 ｜ 软件工程1704 ｜ 张雨梦</h4>
+    </div>
+    <div class="bottom1" v-show="num==2">
       <h4>北京市海淀区 ｜ 北京交通大学 ｜ 软件工程1704 ｜ 张雨梦</h4>
     </div>
   </div>
@@ -84,6 +111,7 @@ function realFormatSecond (second) {
 export default {
   data () {
     return {
+      num: 1,
       src: '',
       sliderTime: 0,
       audio: {
@@ -92,6 +120,7 @@ export default {
         playing: false /* 音频当前处于播放/暂停状态 */
       },
       musiclist: [],
+      notstarlist: [],
       queryInfo: {
         username: window.sessionStorage.getItem('username'),
         query: ''
@@ -101,9 +130,26 @@ export default {
   name: 'playMusic',
   created () {
     this.getstarmusicList()
+    this.getnotstarmusicList()
   },
   methods: {
-
+    changenumto1 () {
+      this.num = 1
+    },
+    changenumto2 () {
+      this.num = 2
+    },
+    queryaudio () {
+      if (this.num === 1) {
+        this.querystaraudio()
+      } else {
+        this.querynotstaraudio()
+      }
+    },
+    getlist () {
+      this.getstarmusicList()
+      this.getnotstarmusicList()
+    },
     /* 进度条格式化toolTip */
     formatProcessToolTip (index = 0) {
       index = parseInt(this.audio.maxTime / 100 * index)
@@ -150,7 +196,7 @@ export default {
       this.audio.playing = false
     },
 
-    // 获取音频
+    // 获取收藏音频
     async getstarmusicList () {
       const { data: res } = await this.axios.post('/getstar', {
         username: window.sessionStorage.getItem('username')
@@ -163,7 +209,20 @@ export default {
         this.musiclist = res.songlists
       };
     },
-    // 改变收藏状态
+    // 获取未收藏音频
+    async getnotstarmusicList () {
+      const { data: res } = await this.axios.post('/getnotstar', {
+        username: window.sessionStorage.getItem('username')
+      })
+      console.log(res)
+      if (res.status !== '1') return this.$message.error(res.message)
+
+      if (res.status === '1') {
+        this.$message.success(res.message)
+        this.notstarlist = res.songlists
+      };
+    },
+    // 取消收藏状态
     async changestar (title) {
       const { data: res } = await this.axios.post('/canclestar', {
         username: this.queryInfo.username,
@@ -172,6 +231,19 @@ export default {
       console.log(res)
       if (res.status !== '1') return this.$message.error(res.message)
       this.$message.success(res.message)
+      this.getstarmusicList()
+      this.getnotstarmusicList()
+    },
+    // 增加收藏状态
+    async addstar (title) {
+      const { data: res } = await this.axios.post('/star', {
+        username: this.queryInfo.username,
+        title: title
+      })
+      console.log(res)
+      if (res.status !== '1') return this.$message.error(res.message)
+      this.$message.success(res.message)
+      this.getnotstarmusicList()
       this.getstarmusicList()
     },
     // 模糊查询音频
@@ -186,7 +258,18 @@ export default {
       this.$message.success('模糊获取音频列表成功')
       this.musiclist = res.songlists
     },
-
+    // 模糊查询未收藏音频
+    async querynotstaraudio () {
+      // 获取的请求
+      const { data: res } = await this.axios.post('/querynotstaraudio', {
+        username: this.queryInfo.username,
+        query: this.queryInfo.query
+      })
+      console.log(res)
+      if (res.status !== '1') return this.$message.error('模糊获取音频列表失败')
+      this.$message.success('模糊获取音频列表成功')
+      this.notstarlist = res.songlists
+    },
     // 删除音频
     async deleteaudio (musicname) {
       // 弹框询问用户
@@ -211,16 +294,6 @@ export default {
         this.getmusicList()
       }
     }
-  },
-  filters: {
-    /* 使用vue过滤器动态改变按钮的显示 */
-    transPlayPause (value) {
-      return value ? '暂停' : '播放'
-    },
-    /* 整数转换时分秒 */
-    formartSecond (second = 0) {
-      return realFormatSecond(second)
-    }
   }
 }
 </script>
@@ -229,8 +302,14 @@ export default {
 .bottom {
   background-color: #E9EEF3;
   text-align: right;
-  position:fixed;
+  position: fixed;
   bottom:0;
+  right: 5%;
+}
+.bottom1 {
+  background-color: #E9EEF3;
+  text-align: right;
+  top:0px;
   right: 5%;
 }
 #playMusic {
@@ -244,5 +323,15 @@ export default {
   // > span:nth-of-type(2) {
   //   margin-left: 5px;
   // }
+}
+.star {
+  width: 200px;
+  position: fixed;
+  left: 77%;
+}
+.notstar {
+  width: 200px;
+  position: fixed;
+  left: 83%;
 }
 </style>

@@ -18,14 +18,10 @@
         unique-opened :collapse-transition="false"
       >
        <el-menu-item index="/welcome" @click="saveNavState('/welcome')">首页 <i class="el-icon-s-home"></i> </el-menu-item>
-        <el-menu-item index="/rnn" @click="saveNavState('/rnn')" >音频降噪<i class="el-icon-setting"></i></el-menu-item>
+        <el-menu-item index="/rnn" @click="saveNavState('/rnn')" >音频降噪<i class="el-icon-message-solid"></i></el-menu-item>
         <el-menu-item index="/myaudio" @click="saveNavState('/myaudio')">我的音频 <i class="el-icon-document"></i> </el-menu-item>
         <el-menu-item index="/star" @click="saveNavState('/star')" >收藏夹  <i class="el-icon-star-off"></i> </el-menu-item>
-        <el-submenu index="4">
-        <template slot="title">语言</template>
-         <el-menu-item index="/chinese" @click="saveNavState('/chinese')" >中文</el-menu-item>
-         <el-menu-item index="/english" @click="saveNavState('/english')" >English</el-menu-item>
-        </el-submenu>
+        <el-menu-item index="/person" @click="saveNavState('/person')" >个人中心  <i class="el-icon-s-custom"></i> </el-menu-item>
       </el-menu>
        <!-- 用户名下拉菜单 -->
             <el-dropdown class="user-name" trigger="click" @command="handleCommand">
