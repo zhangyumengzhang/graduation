@@ -77,7 +77,8 @@ export default {
         window.sessionStorage.setItem('username', this.loginForm.username)
         // 获取token
         // console.log(res)
-        this.$router.push('/home')
+        this.$router.push('/welcome')
+        window.sessionStorage.setItem('activepath', '/welcome')
       })
     },
     // 显示密码/隐藏密码

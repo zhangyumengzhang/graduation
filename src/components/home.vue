@@ -3,8 +3,8 @@
     <!-- 头部区域 -->
     <el-header>
       <div>
-        <img class="logo" src="../assets/shoplogo.png" alt="" />
-        <span> 音频降噪系统</span>
+        <img class="logo" src="../assets/newlogo6.png" alt="" />
+        <!-- <span> 音频降噪系统</span> -->
       </div>
       <!--头部导航栏区域-->
       <el-menu
@@ -56,6 +56,7 @@ export default {
   created () {
     this.activePath = window.sessionStorage.getItem('activePath')
     this.username = window.sessionStorage.getItem('username')
+    this.saveNavState('/welcome')
   },
   methods: {
     // 保存链接激活状态
@@ -100,8 +101,8 @@ export default {
 }
 .logo {
   // display: block;
-  width: 120px;
-  height: 40px;
+  width: 180px;
+  height: 55px;
   // border-radius: 50%;
 }
 .el-aside {

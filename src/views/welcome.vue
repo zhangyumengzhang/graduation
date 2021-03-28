@@ -2,12 +2,11 @@
   <div class="home">
     <!--    轮播图   -->
     <div class="index">
-      <el-carousel :interval="4000" type="card" height="480px">
+      <el-carousel :interval="4000"  height="460px" indicator-position="outside" type="card">
         <el-carousel-item v-for="item in imgList" :key="item.id">
           <img :src="item.idView"  class="rightulliimg">
           <div style="padding: 25px;">
             <span>{{ item.text }}</span>
-
           </div>
         </el-carousel-item>
       </el-carousel>
@@ -53,7 +52,7 @@ export default {
       homeList: [],
       imgList: [
         { id: 0, idView: require('@/assets/erji.jpg') },
-        { id: 1, idView: require('@/assets/info.jpg') },
+        { id: 1, idView: require('@/assets/info1.jpg') },
         { id: 2, idView: require('@/assets/erji1.jpg') }
       ],
       imgList2: [

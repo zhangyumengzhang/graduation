@@ -108,7 +108,6 @@ export default {
     async editperson () {
       this.$message.success('ceshi')
       this.$refs.personFormRef.validate(async valid => {
-        this.$message.success('ceshi2')
         if (!valid) return
         const { data: res } = await this.axios.post('/modifyuser', {
           username: this.personForm.username,

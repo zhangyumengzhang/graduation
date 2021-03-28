@@ -68,7 +68,7 @@ export default {
     // 上传音频
     async beforeUpload (file) {
       // 文件类型进行判断
-      const isAudio = file.type === 'audio/mp3' || file.type === 'audio/wav'
+      const isAudio = file.type === 'audio/mp3' || file.type === 'audio/wav'|| file.type === 'audio/mpeg'
       // 限制上传文件大小 4M
       const isLt4M = file.size / 1024 / 1024 < 4
       if (!isAudio) {
@@ -95,7 +95,8 @@ export default {
           this.$message.error('上传文件大小不能超过 2MB!')
         }
       } else {
-        this.$message.error('上传文件只能是Mp3或者Wav格式')
+        this.$message.error(file.type)
+        // this.$message.error('上传文件只能是Mp3或者Wav格式')
       }
     },
 

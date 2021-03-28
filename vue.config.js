@@ -11,5 +11,6 @@ module.exports = {
         }
       }
     }
-  }
+  },
+  configureWebpack: { externals: 'hls.js' } // 在这配置webpack的externals这个字段
 }
