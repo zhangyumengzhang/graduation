@@ -87,16 +87,21 @@ export default {
           audiofile.append('username', window.sessionStorage.getItem('username'))
           const { data: res } = await this.axios.post('/Upaudio', audiofile)
           console.log(res)
-          if (res.status !== '1') return this.$message.error('上传失败')
-          this.$message.success('成功')
-          this.audioUrl = res.url
-          console.log(this.audioUrl)
+          if (res.status !== '1') {
+            console.log('ceshi')
+            return this.$message.error(res.message)
+          }
+          if (res.status == '1') {
+             this.$message.success(res.message)
+             this.audioUrl = res.url
+             console.log(this.audioUrl)
+          }
         } else {
-          this.$message.error('上传文件大小不能超过 2MB!')
+          this.$message.error('上传文件大小不能超过 4MB!')
         }
       } else {
-        this.$message.error(file.type)
-        // this.$message.error('上传文件只能是Mp3或者Wav格式')
+        // this.$message.error(file.type)
+        this.$message.error('上传文件只能是Mp3或者Wav格式')
       }
     },
 
@@ -123,8 +128,8 @@ export default {
       audio.append('path', this.audioUrl)
       audio.append('username', window.sessionStorage.getItem('username'))
       const { data: res } = await this.axios.post('/rnn', audio)
-      if (res.status !== '1') return this.$message.error('降噪失败')
-      this.$message.success('成功')
+      if (res.status !== '1') return this.$message.error(res.message)
+      this.$message.success(res.message)
       this.newaudioUrl = res.url
       console.log(this.newaudioUrl)
     }

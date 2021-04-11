@@ -35,6 +35,9 @@
         <el-button  type="primary" @click="editperson()">保 存</el-button>
       </span>
     </el-card>
+     <div class="bottom">
+      <h4>北京市海淀区 ｜ 北京交通大学 ｜ 软件工程1704 ｜ 张雨梦</h4>
+    </div>
   </div>
 </template>
 
@@ -98,7 +101,8 @@ export default {
       if (res.status !== '1') {
         return this.$message.error(res.message)
       }
-      this.$message.success(res.message)
+      console.log(res.message)
+      // this.$message.success(res.message)
       this.personForm = res.userlists[0]
     },
     changeType () {
@@ -106,7 +110,6 @@ export default {
       this.isdisabled = !this.isdisabled
     },
     async editperson () {
-      this.$message.success('ceshi')
       this.$refs.personFormRef.validate(async valid => {
         if (!valid) return
         const { data: res } = await this.axios.post('/modifyuser', {
@@ -124,7 +127,8 @@ export default {
           this.isdisabled = !this.isdisabled
           this.getpersonInfo()
         } else {
-          this.$message.success(res.message)
+          console.log(res.message)
+          // this.$message.success(res.message)
           this.isdisabled = !this.isdisabled
           this.getpersonInfo()
         }
@@ -138,5 +142,12 @@ export default {
 .bottombtn {
   float: right;
   margin-bottom: 10px;
+}
+.bottom {
+  background-color: #E9EEF3;
+  text-align: right;
+  padding-top: 50px;
+  padding-right: 50px;
+  padding-bottom: 10px;
 }
 </style>

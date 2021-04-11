@@ -94,7 +94,8 @@ export default {
           this.resetRegisterForm()
           return this.$message.error(res.message)
         }
-        this.$message.success(res.message)
+        // this.$message.success(res.message)
+        console.log(res.message)
         this.$router.push('/login')
       })
     }

@@ -33,7 +33,8 @@
          <el-table-column type="index" width="50"></el-table-column>
          <el-table-column label="用户名称">{{this.queryInfo.username}}</el-table-column>
          <el-table-column label="音乐名称" prop="title"></el-table-column>
-         <el-table-column label="音乐类型" prop="type"></el-table-column>play
+          <el-table-column label="创建时间" prop="audiotime"></el-table-column>
+         <el-table-column label="音乐类型" prop="type"></el-table-column>
           <el-table-column label="播放" width="160px">
             <template slot-scope="scope">
              <!-- 播放 -->
@@ -59,6 +60,7 @@
          <el-table-column type="index" width="50"></el-table-column>
          <el-table-column label="用户名称">{{this.queryInfo.username}}</el-table-column>
          <el-table-column label="音乐名称" prop="title"></el-table-column>
+          <el-table-column label="创建时间" prop="audiotime"></el-table-column>
          <el-table-column label="音乐类型" prop="type"></el-table-column>play
           <el-table-column label="播放" width="160px">
             <template slot-scope="scope">
@@ -84,7 +86,7 @@
     <div class="bottom" v-show="num==1">
       <h4>北京市海淀区 ｜ 北京交通大学 ｜ 软件工程1704 ｜ 张雨梦</h4>
     </div>
-    <div class="bottom1" v-show="num==2">
+    <div class="bottom" v-show="num==2">
       <h4>北京市海淀区 ｜ 北京交通大学 ｜ 软件工程1704 ｜ 张雨梦</h4>
     </div>
   </div>
@@ -205,7 +207,8 @@ export default {
       if (res.status !== '1') return this.$message.error(res.message)
 
       if (res.status === '1') {
-        this.$message.success(res.message)
+        console.log(res.message)
+        // this.$message.success(res.message)
         this.musiclist = res.songlists
       };
     },
@@ -218,7 +221,8 @@ export default {
       if (res.status !== '1') return this.$message.error(res.message)
 
       if (res.status === '1') {
-        this.$message.success(res.message)
+        console.log(res.message)
+        // this.$message.success(res.message)
         this.notstarlist = res.songlists
       };
     },
@@ -230,9 +234,9 @@ export default {
       })
       console.log(res)
       if (res.status !== '1') return this.$message.error(res.message)
-      this.$message.success(res.message)
-      this.getstarmusicList()
-      this.getnotstarmusicList()
+      console.log(res.message)
+      // this.$message.success(res.message)
+      this.getlist()
     },
     // 增加收藏状态
     async addstar (title) {
@@ -242,9 +246,9 @@ export default {
       })
       console.log(res)
       if (res.status !== '1') return this.$message.error(res.message)
-      this.$message.success(res.message)
-      this.getnotstarmusicList()
-      this.getstarmusicList()
+      console.log(res.message)
+      // this.$message.success(res.message)
+      this.getlist()
     },
     // 模糊查询音频
     async querystaraudio () {
@@ -255,7 +259,8 @@ export default {
       })
       console.log(res)
       if (res.status !== '1') return this.$message.error('模糊获取音频列表失败')
-      this.$message.success('模糊获取音频列表成功')
+      console.log(res.message)
+      // this.$message.success(res.message)
       this.musiclist = res.songlists
     },
     // 模糊查询未收藏音频
@@ -267,7 +272,8 @@ export default {
       })
       console.log(res)
       if (res.status !== '1') return this.$message.error('模糊获取音频列表失败')
-      this.$message.success('模糊获取音频列表成功')
+      console.log(res.message)
+      // this.$message.success(res.message)
       this.notstarlist = res.songlists
     },
     // 删除音频
@@ -290,8 +296,9 @@ export default {
       console.log(res)
       if (res.status !== '1') return this.$message.error(res.message)
       if (res.status === '1') {
-        this.$message.success(res.message)
-        this.getmusicList()
+        console.log(res.message)
+        // this.$message.success(res.message)
+        this.getlist()
       }
     }
   }

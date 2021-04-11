@@ -17,7 +17,7 @@
           </el-input>
           </el-col>
        </el-row>
-        <aplayer ref="player"  :music="musiclist[0]" :list="musiclist" :v-if="flag"  listMaxHeight='400px' ></aplayer>
+        <aplayer ref="player"  :music="audio.music" :list="musiclist" :v-if="flag"  listMaxHeight='400px' ></aplayer>
     </div>
  </el-card>
      <div class="bottom">
@@ -32,7 +32,7 @@ export default {
   name: 'Aplayer',
   components: {
     // 别忘了引入组件
-    aplayer: aplayer
+    aplayer
   },
   data () {
     return {
@@ -42,12 +42,24 @@ export default {
         query: ''
       },
       flag: false,
-      musiclist: []
+      musiclist: [],
+      audio: {
+        progress: false,
+        progressPercent: 0,
+        successPercent: 0,
+        list: [], // 播放列表
+        music: { // 对象，
+          title: '',
+          artist: '',
+          src: '',
+          lrc: '[00:00.00]lrc here\n[00:01.00]aplayer'
+        }
+      }
     }
   },
   async mounted () {
     // 异步加载，先加载出player再使用
-    this.init()
+    await this.init()
     const aplayer = this.$refs.player.control
     aplayer.play()
   },
@@ -63,8 +75,13 @@ export default {
         return this.$message.error(res.message)
       }
       if (res.status === '1') {
-        this.$message.success(res.message)
+        console.log(res.message)
+        // this.$message.success(res.message)
         this.temp = res.songlists
+
+        this.audio.music.title = this.temp[0].title
+        this.audio.music.artist = window.sessionStorage.getItem('username')
+        this.audio.music.src = 'http://localhost:8900/static/' + this.temp[0].title
 
         for (let i = 0; i <= this.temp.length; i++) {
           const obj = {}
@@ -73,14 +90,11 @@ export default {
           obj.title = this.temp[i].title
           obj.artist = window.sessionStorage.getItem('username')
           obj.src = 'http://localhost:8900/static/' + this.temp[i].title
-          if (this.temp[i].isstar === '1') {
-            obj.isstar = '已收藏'
-          } else {
-            obj.isstar = '未收藏'
-          }
           // 把数据一个个push到songList数组中，在a-player标签中使用 :music="songList" 就OK了
           this.musiclist.push(obj)
+          this.audio.music = this.musiclist[0]
         }
+        this.flag = true
       };
     },
     // 模糊查询音频
@@ -96,8 +110,13 @@ export default {
         return this.$message.error(res.message)
       }
       if (res.status === '1') {
-        this.$message.success(res.message)
+        console.log(res.message)
+        // this.$message.success(res.message)
         this.temp = res.songlists
+
+        this.audio.music.title = this.temp[0].title
+        this.audio.music.artist = window.sessionStorage.getItem('username')
+        this.audio.music.src = 'http://localhost:8900/static/' + this.temp[0].title
 
         for (let i = 0; i <= this.temp.length; i++) {
           const obj = {}
@@ -106,14 +125,11 @@ export default {
           obj.title = this.temp[i].title
           obj.artist = window.sessionStorage.getItem('username')
           obj.src = 'http://localhost:8900/static/' + this.temp[i].title
-          if (this.temp[i].isstar === '1') {
-            obj.isstar = '已收藏'
-          } else {
-            obj.isstar = '未收藏'
-          }
           // 把数据一个个push到songList数组中，在a-player标签中使用 :music="songList" 就OK了
           this.musiclist.push(obj)
+          this.audio.music = this.musiclist[0]
         }
+        this.flag = true
       };
     }
   }

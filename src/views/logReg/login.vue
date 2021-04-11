@@ -72,8 +72,8 @@ export default {
         const { data: res } = await this.axios.post('/login', this.loginForm)
         console.log(res)
         if (res.status !== '1') return this.$message.error(res.message)
-        // console.log(res)
-        this.$message.success(res.message)
+        console.log(res.message)
+        // this.$message.success(res.message)
         window.sessionStorage.setItem('username', this.loginForm.username)
         // 获取token
         // console.log(res)
